@@ -1,0 +1,17 @@
+stages:          # List of stages for jobs, and their order of execution
+  - dockerbuild-push
+
+package:       # This job runs in the dockerbuild-push stage, which runs first.
+  image: docker:latest # 밀키트 형태로 필요한 빌드 도구 등 필요한 의존성만 모아 놓은 docker image 를 사용한다.
+  stage: dockerbuild-push
+  services: 
+    - docker:dind
+  before_script:
+    - docker login registry.com -u $GITLAB_USER -p $GITLAB_PW
+  script:
+    - echo "Logged into $GITLAB_USER..."
+    - docker build -t registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME . 
+    - docker push registry.gitlab.com/$GITLAB_USER/$PROJECT_NAME
+  after_script:
+    - docker logout
+
