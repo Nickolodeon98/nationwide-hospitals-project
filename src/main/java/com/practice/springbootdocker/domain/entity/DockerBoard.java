@@ -34,6 +34,7 @@ public class DockerBoard {
     }
 
     @OneToMany(mappedBy = "postToComment")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     public static DockerBoardResponse of(DockerBoard dockerBoard) {

@@ -39,6 +39,7 @@ public class Hospital {
     private float totalAreaSize;
 
     @OneToMany(mappedBy = "hospitalToReview")
+    @Builder.Default
     private List<Review> review = new ArrayList<>();
 
     public Hospital(String openServiceName, int openLocalGovernmentCode, String managementNumber, LocalDateTime licenseDate,
