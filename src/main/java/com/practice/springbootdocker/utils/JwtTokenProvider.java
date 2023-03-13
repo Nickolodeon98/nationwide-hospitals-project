@@ -12,9 +12,6 @@ public class JwtTokenProvider {
 
   private static final Long period = 1000L * 60 * 60;
 
-  @Value("${jwt.secret}")
-  private String secretKey;
-
   public static String createToken(String secretKey, String userName) {
     Claims claims = Jwts.claims().setSubject(userName);
     Date currentDate = new Date();
@@ -26,4 +23,12 @@ public class JwtTokenProvider {
         .signWith(SignatureAlgorithm.HS256, secretKey)
         .compact();
   }
+
+
+  public static Claims extractClaims(String token, String secretKey) {
+    Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    return claims;
+  }
+
+
 }
