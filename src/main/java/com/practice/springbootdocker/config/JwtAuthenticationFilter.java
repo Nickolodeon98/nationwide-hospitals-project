@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
@@ -38,7 +39,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
+    if (JwtTokenProvider.isExpired(token, secretKey))
+      filterChain.doFilter(request, response);
 
+    String userName = JwtTokenProvider.getUserName(token, secretKey);
+
+    SecurityContextHolder.getContext().setAuthentication(JwtTokenProvider.getAuthentication(userName));
+    filterChain.doFilter(request, response);
 
   }
 }
