@@ -4,7 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,5 +34,17 @@ public class JwtTokenProvider {
     return claims;
   }
 
+  public static boolean isExpired(String token, String secretKey) {
+    Claims claimsToCheck = extractClaims(token, secretKey);
+    if (claimsToCheck.getExpiration().before(new Date())) return true;
+    return false;
+  }
 
+  public static String getUserName(String token, String secretKey) {
+    return extractClaims(token, secretKey).getSubject();
+  }
+
+  public static Authentication getAuthentication(String userName) {
+    return new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority("USER")));
+  }
 }
