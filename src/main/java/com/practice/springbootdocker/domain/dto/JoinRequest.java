@@ -23,8 +23,11 @@ public class JoinRequest {
         .build();
   }
 
-  public User toEntity(JoinRequest joinRequest) {
-
+  public User toEntity() {
+    return User.builder()
+        .userName(this.userName)
+        .password(this.password)
+        .build();
   }
 
 }
