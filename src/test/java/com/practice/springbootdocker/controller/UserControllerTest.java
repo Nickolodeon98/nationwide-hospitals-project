@@ -2,6 +2,7 @@ package com.practice.springbootdocker.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -64,6 +65,8 @@ class UserControllerTest {
         .andExpect(status().isOk())
 //        .andExpect(jsonPath("$.message").value(joinRequest.getUserName() + "님 환영합니다."))
         .andDo(print());
+
+    verify(userService).registerUser(joinRequest);
   }
 
   @Nested
@@ -79,6 +82,8 @@ class UserControllerTest {
       mockMvc.perform(get(url).content(objectMapper.writeValueAsBytes(loginRequest)))
           .andExpect(status().isOk())
           .andDo(print());
+
+      verify(userService).authenticateUser(loginRequest);
     }
   }
 
