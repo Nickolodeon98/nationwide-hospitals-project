@@ -10,7 +10,17 @@ spring:
     database: mysql
     hibernate:
       ddl-auto: update
+  session:
+    store-type: "jdbc"
+    jdbc:
+      initialize-schema: embedded
+#      schema: classpath:org
+      table-name: SPRING_SESSION
+
+
 server:
   servlet:
     encoding:
       force-response: true
+    session:
+      timeout: 3600
